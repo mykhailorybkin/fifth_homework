@@ -59,7 +59,7 @@ class Record:
         try:
               for p in self.phones:
                    if p.value == phone_number:
-                        return self.phones[p]
+                        return p
                    else:
                         return None
         except Exception as e:
