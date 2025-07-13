@@ -18,7 +18,7 @@ class Phone(Field):
             if re.fullmatch(pattern, number):
                 self.value = number
             else:
-                return ValueError
+                return None
             
                
 
@@ -35,40 +35,32 @@ class Record:
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
     def remove_phone(self, phone):
-        try:
-            for p in self.phones:
-                if p.value == phone:
-                    self.phones.remove(p)
-                    return "Phone deleted"
-                else:
-                    return "Phone not found"
-        except:
-            return "Exception occured"
+        required_phone = self.find_phone(phone)
+        if required_phone in self.phones:
+            self.phones.remove(required_phone)
+        else:
+            return None
+        
     def edit_phone(self, old_phone, new_phone):
-        try:
-              for p in self.phones:
-                   if p.value == old_phone:
-                        self.phones.remove(p)
-                        self.add_phone(new_phone)
-                        return "Phone changed"
-                   else:
-                        return "Phone not found"
-        except ValueError as v:
-             return v
+        for p in self.phones:
+            if p.value == old_phone:
+                self.phones.remove(p)
+                self.add_phone(new_phone)
+            else:
+                return None
+        
     def find_phone(self, phone_number):
-        try:
-              for p in self.phones:
-                   if p.value == phone_number:
-                        return p
-                   else:
-                        return None
-        except Exception as e:
-             return e
+        for p in self.phones:
+            if p.value == phone_number:
+                return p
+            else:
+                continue
+        return self.phones
+        
             
         
 
 class AddressBook(UserDict):
-
     # реалізація класу
     def add_record(self, record : Record):
             self.data[record.name.value] = record
@@ -78,12 +70,12 @@ class AddressBook(UserDict):
     
     def delete(self, name):
         if name in self.data:
-             del self.data[name]
-             return f"Record {name} has been deleted"
+            del self.data[name]
+            return f"Record {name} has been deleted"
         else:
-             return f"Record {name} has not been found"
+            return f"Record {name} has not been found"
     def __str__(self):
-         return '\n'.join(str(record) for record in self.data.values())
+        return '\n'.join(str(record) for record in self.data.values())
         
 book = AddressBook()
 
@@ -93,5 +85,8 @@ john_record.add_phone("1234567890")
 john_record.add_phone("5555555555")
 book.add_record(john_record)
 print(book)
+john_record.remove_phone("5555555555")
+print(book)
+
 
 
