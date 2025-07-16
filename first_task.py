@@ -18,7 +18,7 @@ class Phone(Field):
             if re.fullmatch(pattern, number):
                 self.value = number
             else:
-                return None
+                return ValueError
             
                
 
@@ -44,18 +44,23 @@ class Record:
     def edit_phone(self, old_phone, new_phone):
         for p in self.phones:
             if p.value == old_phone:
-                self.phones.remove(p)
-                self.add_phone(new_phone)
+                try:
+                    self.add_phone(new_phone)
+                    self.phones.remove(p)
+                except:
+                    return ValueError
             else:
-                return None
+                return ValueError
         
     def find_phone(self, phone_number):
+        matches = []
         for p in self.phones:
             if p.value == phone_number:
-                return p
-            else:
-                continue
-        return self.phones
+                matches.append(p)
+        if matches:
+            return matches
+        else:
+            return None
         
             
         
