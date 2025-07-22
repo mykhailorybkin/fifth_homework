@@ -11,16 +11,16 @@ class Field:
 
 class Name(Field):
     # реалізація класу
-		pass
+	    pass
 
 
 class Phone(Field):
-	def __init__(self, number):
-            pattern = r"^\d{10}$"
-            if re.fullmatch(pattern, number):
-                self.value = number
-            else:
-                raise ValueError
+    def __init__(self, number):
+        pattern = r"^\d{10}$"
+        if re.fullmatch(pattern, number):
+            self.value = number
+        else:
+            raise ValueError
             
                
 class Record:
@@ -29,7 +29,6 @@ class Record:
         self.phones =[]
 
     # реалізація класу
-
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
     
@@ -48,14 +47,10 @@ class Record:
 
     def edit_phone(self, old_phone, new_phone):
         existing_phone = self.find_phone(old_phone)
-        if existing_phone:
-            try:
-                self.remove_phone(old_phone)
-                self.add_phone(new_phone)
-            except:
-                raise ValueError
-        else:
+        if not existing_phone:
             raise ValueError
+        self.add_phone(new_phone)
+        self.remove_phone(old_phone)
 
 
     def find_phone(self, phone_number):
@@ -69,7 +64,7 @@ class Record:
 class AddressBook(UserDict):
     # реалізація класу
     def add_record(self, record : Record):
-            self.data[record.name.value] = record
+        self.data[record.name.value] = record
 
     def find(self, name):
         return self.data.get(name)
